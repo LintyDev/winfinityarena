@@ -16,11 +16,15 @@ import { middleware } from './kernel.js'
 
 router
   .group(() => {
-    router.post('register', [RegisterController, 'store']).as('auth.register')
-    router.post('login', [LoginController, 'store']).as('auth.login')
-    router.post('logout', [LogoutController, 'handle']).as('auth.logout').use(middleware.auth())
+    router.post('register', [RegisterController, 'store']).as('register')
+    router.post('login', [LoginController, 'store']).as('login')
+    router.post('logout', [LogoutController, 'handle']).as('logout').use(middleware.auth())
   })
   .as('auth')
   .prefix('/auth')
 
 router.get('/me', [UserController, 'me']).as('me').use(middleware.auth())
+router
+  .get('/admin', [UserController, 'admin'])
+  .as('check.admin')
+  .use([middleware.auth(), middleware.admin()])

@@ -7,4 +7,11 @@ export default class UserController {
       user: auth.user,
     })
   }
+
+  async admin({ auth, response }: HttpContext) {
+    return response.json({
+      username: auth.user?.username,
+      admin: true,
+    })
+  }
 }

@@ -46,11 +46,28 @@ const logout = async () => {
   }
 }
 
+const checkAdmin = async () => {
+  try {
+    const res = await fetch("http://localhost:3333/admin", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    const ress = await res.json()
+    console.log('CHECK ADMIN', ress);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       {user ? 
       <div>
         <p>{user}</p>
+        <button className="text-blue-500" onClick={checkAdmin}>Check Admin</button>
         <button className="text-white" onClick={logout}>Logout</button>
       </div> :
       <LoginForm />}
