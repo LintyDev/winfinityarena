@@ -1,40 +1,40 @@
-"use client"
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+'use client';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 function LoginForm() {
   const [userData, setUserData] = useState({
-    username: "",
-    password: "",
+    username: '',
+    password: '',
   });
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3333/auth/login", {
-        method: "POST",
+      const res = await fetch('http://localhost:3333/auth/login', {
+        method: 'POST',
         body: JSON.stringify(userData),
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        credentials: "include",
+        credentials: 'include',
       });
-      const json = await res.json()
+      const json = await res.json();
       console.log('RESPONSE LOGIN', json);
-      
-      const res2 = await fetch("http://localhost:3333/me", {
-        method: "GET",
+
+      const res2 = await fetch('http://localhost:3333/me', {
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        credentials: "include",
+        credentials: 'include',
       });
-      const ress = await res2.json()
-      console.log('RESPONSE ME',ress)
-      router.replace('/')
+      const ress = await res2.json();
+      console.log('RESPONSE ME', ress);
+      router.replace('/');
     } catch (error: any) {
-      console.log("LoginError", error);
+      console.log('LoginError', error);
     }
   };
 
@@ -57,7 +57,9 @@ function LoginForm() {
             setUserData((prev) => ({ ...prev, password: e.target.value }))
           }
         />
-        <button type="submit" className="text-white">Login</button>
+        <button type="submit" className="text-white">
+          Login
+        </button>
       </form>
     </div>
   );

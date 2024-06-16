@@ -9,7 +9,7 @@ export default class LoginController {
 
     await auth.use('web').login(user)
     return response.ok({
-      username: user.username,
+      user,
     })
   }
 }
