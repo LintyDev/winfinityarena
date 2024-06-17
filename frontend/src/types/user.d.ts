@@ -20,6 +20,10 @@ export interface UserInput {
   password: string;
 }
 
+export interface UserCreateInput extends UserInput {
+  confirmPassword: string;
+}
+
 enum Roles {
   USER = 'USER',
   ADMIN = 'ADMIN',

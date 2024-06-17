@@ -8,6 +8,6 @@ export default class RegisterController {
     const user = await User.create(data)
 
     await auth.use('web').login(user)
-    return response.ok({ username: user.username })
+    return response.json({ success: true, user })
   }
 }

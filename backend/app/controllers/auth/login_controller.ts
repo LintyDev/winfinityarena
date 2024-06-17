@@ -8,7 +8,8 @@ export default class LoginController {
     const user = await User.verifyCredentials(username, password)
 
     await auth.use('web').login(user)
-    return response.ok({
+    return response.json({
+      success: true,
       user,
     })
   }
