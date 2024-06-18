@@ -1,6 +1,5 @@
 'use client';
 
-import Header from '@/components/Header';
 import StartMenu from '@/components/StartMenu';
 import { useAuth } from '@/contexts/AuthContext';
 

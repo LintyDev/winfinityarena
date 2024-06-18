@@ -1,6 +1,6 @@
 'use client';
 import { useAuth } from '@/contexts/AuthContext';
-import { redirect, useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { useLayoutEffect } from 'react';
 
 export default function AuthLayout({
