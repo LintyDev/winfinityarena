@@ -1,7 +1,8 @@
 'use client';
-import LoginForm from '@/components/LoginForm';
+
+import Header from '@/components/Header';
+import StartMenu from '@/components/StartMenu';
 import { useAuth } from '@/contexts/AuthContext';
-import axiosClient from '@/lib/axiosClient';
 
 export default function Home() {
   const auth = useAuth();
@@ -15,11 +16,9 @@ export default function Home() {
   };
 
   return (
-    <main className="flex flex-col items-center pt-5">
-      <p>Hello, {auth?.user?.username}!</p>
-      <button className="text-white" onClick={logout}>
-        Logout
-      </button>
+    <main className="flex flex-col items-center">
+      <Header />
+      <StartMenu />
     </main>
   );
 }

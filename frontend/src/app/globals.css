@@ -12,10 +12,16 @@ body {
 }
 
 @layer utilities {
-  .win-btn {
+  .footer {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%);
+  }
+  .win-btn,
+  .win-btn-small {
     text-align: center;
     display: inline-block;
-    margin: 5px;
     font-weight: bold;
     padding: 10px;
     background-color: lightgray;
@@ -24,8 +30,12 @@ body {
     box-shadow: 0 0.2em gray;
     cursor: pointer;
   }
+  .win-btn-small {
+    padding: 5px;
+  }
 
-  .win-btn:active {
+  .win-btn:active,
+  .win-btn-small:active {
     box-shadow: none;
     position: relative;
     top: 0.2em;
@@ -35,6 +45,23 @@ body {
     background-color: #1bbd10;
     color: #006400;
     box-shadow: 0 0.2em #00a105;
-    /* text-shadow: -1px -1px #2ea32e, 1px 1px #12bd17; */
+  }
+
+  .blue {
+    background-color: #0095ff;
+    color: #003d68;
+    box-shadow: 0 0.2em #006ebc;
+  }
+
+  .red {
+    background-color: #bd1010;
+    color: #770909;
+    box-shadow: 0 0.2em #7f0b0b;
+  }
+
+  .orange {
+    background-color: #bd7810;
+    color: #66410b;
+    box-shadow: 0 0.2em #99610d;
   }
 }
