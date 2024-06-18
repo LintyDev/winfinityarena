@@ -25,10 +25,16 @@ function Header() {
         onClick={() => router.push('/')}
         alt="Logo WinfinityArena"
         width={250}
+        priority={true}
       />
       <div className="flex justify-between gap-4 items-center">
         <p>Bienvenue, {auth?.user?.username}!</p>
-        <p className="win-btn-small blue">Mon profil</p>
+        <p
+          className="win-btn-small blue"
+          onClick={() => router.push('/profile')}
+        >
+          Mon profil
+        </p>
         <p className="win-btn-small red" onClick={logout}>
           Déconnexion
         </p>
