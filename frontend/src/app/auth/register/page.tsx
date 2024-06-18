@@ -13,6 +13,7 @@ const schema = yup
       .string()
       .min(3, 'Caractères minimum: 3.')
       .trim()
+      .lowercase()
       .required('Veuillez remplir ce champ.'),
     password: yup
       .string()
@@ -54,7 +55,7 @@ function Register() {
   };
 
   return (
-    <section className="h-svh text-center flex flex-col justify-center items-center">
+    <section className="m-auto text-center flex flex-col justify-center items-center">
       <h1>Bienvenue sur WinfinityArena</h1>
       <form
         className="max-w-md flex flex-col gap-2.5 p-3 rounded-md bg-purple-950"
@@ -85,7 +86,10 @@ function Register() {
         <p className="text-red-600">{displayError}</p>
       </form>
       <p className="cursor-pointer ">
-        Déjà un compte ? <a href="/auth/login">Se connecter.</a>
+        Déjà un compte ?{' '}
+        <a href="/auth/login" className="underline">
+          Se connecter.
+        </a>
       </p>
     </section>
   );

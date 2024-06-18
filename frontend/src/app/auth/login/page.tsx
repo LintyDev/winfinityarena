@@ -9,7 +9,11 @@ import * as yup from 'yup';
 
 const schema = yup
   .object({
-    username: yup.string().trim().required('Veuillez remplir ce champ.'),
+    username: yup
+      .string()
+      .trim()
+      .lowercase()
+      .required('Veuillez remplir ce champ.'),
     password: yup.string().required('Veuillez remplir ce champ.'),
   })
   .required();
@@ -35,7 +39,7 @@ function Login() {
   };
 
   return (
-    <section className="h-svh text-center flex flex-col justify-center items-center">
+    <section className="m-auto text-center flex flex-col justify-center items-center">
       <h1>Bienvenue sur WinfinityArena</h1>
       <form
         className="max-w-md flex flex-col gap-2.5 p-3 rounded-md bg-purple-950"
@@ -59,7 +63,10 @@ function Login() {
         <p className="text-red-600">{displayError}</p>
       </form>
       <p className="">
-        Nouveau ici ? <a href="/auth/register">Créez un compte maintenant.</a>
+        Nouveau ici ?{' '}
+        <a href="/auth/register" className="underline">
+          Créez un compte maintenant.
+        </a>
       </p>
     </section>
   );
