@@ -24,6 +24,7 @@ router
   .prefix('/auth')
 
 router.get('/me', [UserController, 'me']).as('me').use(middleware.auth())
+router.post('/me', [UserController, 'edit']).as('me.edit').use(middleware.auth())
 router
   .get('/admin', [UserController, 'admin'])
   .as('check.admin')
