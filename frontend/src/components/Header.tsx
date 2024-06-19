@@ -17,16 +17,15 @@ function Header() {
     }
   };
 
+  const goToHome = () => {
+    router.push('/');
+  };
+
   return (
     <div className="w-full flex justify-between items-center pt-2 pb-[10px] px-[20px] bg-purple-950">
-      <Image
-        src={logo}
-        className="cursor-pointer"
-        onClick={() => router.push('/')}
-        alt="Logo WinfinityArena"
-        width={250}
-        priority={true}
-      />
+      <p className="subtitle cursor-pointer" onClick={goToHome}>
+        WinfinityArena
+      </p>
       <div className="flex justify-between gap-4 items-center">
         <p>Bienvenue, {auth?.user?.username}!</p>
         <p
