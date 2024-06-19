@@ -1,6 +1,8 @@
 export default interface User {
   id: number;
 
+  avatar: string;
+
   username: string;
 
   role: Roles;
@@ -22,6 +24,18 @@ export interface UserInput {
 
 export interface UserCreateInput extends UserInput {
   confirmPassword: string;
+}
+
+export interface UserUpdateInput {
+  id: number;
+
+  avatar?: string;
+
+  username?: string;
+
+  password?: string;
+
+  oldPassword?: string;
 }
 
 enum Roles {

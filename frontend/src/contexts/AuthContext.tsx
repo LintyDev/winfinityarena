@@ -1,14 +1,22 @@
 'use client';
 import axiosClient from '@/lib/axiosClient';
-import User, { UserInput } from '@/types/user';
+import User, { UserInput, UserUpdateInput } from '@/types/user';
 import { usePathname, useRouter } from 'next/navigation';
-import { createContext, useContext, useLayoutEffect, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 
 interface AuthContextType {
   user: User | null;
   login: (data: UserInput) => Promise<void>;
   logout: () => Promise<void>;
   register: (data: UserInput) => Promise<void>;
+  edit: (data: UserUpdateInput) => Promise<boolean>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -17,6 +25,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [update, setUpdate] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -48,9 +57,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  useLayoutEffect(() => {
+  const edit = useCallback(async (data: UserUpdateInput) => {
+    const res = await axiosClient.post('/me', JSON.stringify(data));
+    if (res.data.success) {
+      setUser(res.data.user);
+      setUpdate(true);
+      return true;
+    }
+    return false;
+  }, []);
+
+  useEffect(() => {
     const checkUser = async () => {
       try {
+        setUpdate(false);
         const res = await axiosClient.get('/me');
         setUser(res.data);
       } catch (error) {
@@ -62,10 +82,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     checkUser();
-  }, [router, pathname]);
+  }, [router, pathname, update]);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, register }}>
+    <AuthContext.Provider value={{ user, login, logout, register, edit }}>
       {children}
     </AuthContext.Provider>
   );
