@@ -34,6 +34,7 @@ body {
   }
   .win-btn-small {
     padding: 5px;
+    font-size: 15px;
   }
 
   .win-btn:active,
@@ -65,5 +66,32 @@ body {
     background-color: #bd7810;
     color: #66410b;
     box-shadow: 0 0.2em #99610d;
+  }
+
+  .title {
+    @apply font-upheavtt text-4xl;
+    text-shadow: -1px -1px 0 black, -3px -1px 0 black, -3px 3px 0 black,
+      1px 3px 0 black;
+  }
+
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100svw;
+    height: 100svh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-view {
+    @apply bg-purple-950;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
   }
 }
