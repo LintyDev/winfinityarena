@@ -22,7 +22,7 @@ const schema = yup
     confirmPassword: yup
       .string()
       .required('Veuillez remplir ce champ.')
-      .oneOf([yup.ref('password')], 'Les mot de passe ne correspondent pas.'),
+      .oneOf([yup.ref('password')], 'Les mots de passe ne correspondent pas.'),
   })
   .required();
 
