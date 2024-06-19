@@ -40,7 +40,7 @@ function Login() {
 
   return (
     <section className="m-auto text-center flex flex-col justify-center items-center">
-      <h1>Bienvenue sur WinfinityArena</h1>
+      <h1 className="subtitle">Bienvenue sur WinfinityArena</h1>
       <form
         className="max-w-md flex flex-col gap-2.5 p-3 rounded-md bg-purple-950"
         onSubmit={handleSubmit(handleSubmitLogin)}
