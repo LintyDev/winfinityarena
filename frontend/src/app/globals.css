@@ -80,6 +80,12 @@ body {
       1px 3px 0 black;
   }
 
+  .text-simple {
+    @apply font-upheavtt text-lg;
+    text-shadow: -1px -1px 0 black, -3px -1px 0 black, -3px 3px 0 black,
+      1px 3px 0 black;
+  }
+
   .modal {
     position: fixed;
     top: 0;

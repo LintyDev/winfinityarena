@@ -1,5 +1,6 @@
 'use client';
 import axiosClient from '@/lib/axiosClient';
+import { unprotectedRoutes } from '@/lib/unprotectedRoutes';
 import User, { UserInput, UserUpdateInput } from '@/types/user';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -75,7 +76,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(res.data);
       } catch (error) {
         setUser(null);
-        if (pathname !== '/auth/login' && pathname !== '/auth/register') {
+        if (!unprotectedRoutes.includes(pathname)) {
           router.push('/auth/login');
         }
       }
