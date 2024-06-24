@@ -5,6 +5,8 @@ import User, { UserInput, UserUpdateInput } from '@/types/user';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   createContext,
+  Dispatch,
+  SetStateAction,
   useCallback,
   useContext,
   useEffect,
@@ -18,11 +20,19 @@ interface AuthContextType {
   logout: () => Promise<void>;
   register: (data: UserInput) => Promise<void>;
   edit: (data: UserUpdateInput) => Promise<boolean>;
+  setUpdate: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined
-);
+export const AuthContext = createContext<AuthContextType>({
+  user: null,
+  login: async () => {},
+  logout: async () => {},
+  register: async () => {},
+  edit: async () => {
+    return false;
+  },
+  setUpdate: () => {},
+});
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -61,7 +71,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const edit = useCallback(async (data: UserUpdateInput) => {
     const res = await axiosClient.post('/me', JSON.stringify(data));
     if (res.data.success) {
-      setUser(res.data.user);
+      // setUser((prev) => ({ ...prev, ...res.data.user }));
       setUpdate(true);
       return true;
     }
@@ -86,7 +96,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [router, pathname, update]);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, register, edit }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, register, edit, setUpdate }}
+    >
       {children}
     </AuthContext.Provider>
   );

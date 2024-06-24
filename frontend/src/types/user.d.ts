@@ -7,9 +7,7 @@ export default interface User {
 
   role: Roles;
 
-  gameWin: number;
-
-  gamePlayed: number;
+  meta: Meta;
 
   createdAt: string;
 
@@ -41,4 +39,23 @@ export interface UserUpdateInput {
 enum Roles {
   USER = 'USER',
   ADMIN = 'ADMIN',
+}
+
+interface Meta {
+  gamePlayed: Total;
+  gameWin: Total;
+  inGame: InGame[];
+}
+
+interface Total {
+  total: string;
+}
+
+interface InGame {
+  id: number;
+  sessionId: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+  accessKey: number;
 }
