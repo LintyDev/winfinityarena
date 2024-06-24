@@ -13,7 +13,7 @@ function UserCard() {
     <div className="flex items-center">
       <Image
         placeholder="empty"
-        src={`/avatars/${user?.avatar}.png`}
+        src={`/avatars/${user?.avatar ?? 'avatar1'}.png`}
         alt="avatar profile"
         width={125}
         height={125}
@@ -26,11 +26,11 @@ function UserCard() {
         </div>
         <div className="flex gap-1 items-center">
           <Image src={IconGame} alt="icon user" width={32} height={32} />
-          <p className="font-upheavtt">: {user?.gamePlayed}</p>
+          <p className="font-upheavtt">: {user?.meta.gamePlayed?.total}</p>
         </div>
         <div className="flex gap-1 items-center">
           <Image src={IconTrophy} alt="icon user" width={32} height={32} />
-          <p className="font-upheavtt">: {user?.gameWin}</p>
+          <p className="font-upheavtt">: {user?.meta.gameWin?.total}</p>
         </div>
       </div>
     </div>

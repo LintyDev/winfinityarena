@@ -24,10 +24,11 @@ function Header() {
   return (
     <div className="w-full flex justify-between items-center pt-2 pb-[10px] px-[20px] bg-purple-950">
       <p className="subtitle cursor-pointer" onClick={goToHome}>
-        WinfinityArena
+        <span className="hidden sm:block">WinfinityArena</span>
+        <span className="sm:hidden">Winfinity</span>
       </p>
       <div className="flex justify-between gap-4 items-center">
-        <p>Bienvenue, {auth?.user?.username}!</p>
+        <p className="hidden md:block">Bienvenue, {auth?.user?.username}!</p>
         <p
           className="win-btn-small blue"
           onClick={() => router.push('/profile')}
