@@ -10,8 +10,6 @@ export default class extends BaseSchema {
       table.string('avatar').notNullable().defaultTo('avatar1')
       table.string('username').notNullable().unique()
       table.string('password').notNullable()
-      table.integer('game_win').notNullable().defaultTo(0)
-      table.integer('game_played').notNullable().defaultTo(0)
       table.string('role').notNullable().defaultTo(Roles.USER)
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
