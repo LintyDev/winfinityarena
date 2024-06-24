@@ -10,7 +10,7 @@ import { defineConfig } from '@adonisjs/cors'
 
 const corsConfig = defineConfig({
   enabled: true,
-  origin: [env.get('ORIGIN') ?? ''],
+  origin: [env.get('ORIGIN') ?? '', 'https://admin.socket.io'],
   methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE'],
   headers: true,
   exposeHeaders: [],
