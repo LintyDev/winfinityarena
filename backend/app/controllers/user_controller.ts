@@ -14,7 +14,7 @@ export default class UserController {
     const gameWin = await user.related('rooms').query().wherePivot('win', true).count('* as total')
     user.$extras.gameWin = gameWin[0].$extras
 
-    const inGame = await user.related('rooms').query().where('status', RoomStatus.IN_PROGRESS)
+    const inGame = await user.related('rooms').query().whereNot('status', RoomStatus.COMPLETED)
     user.$extras.inGame = inGame
 
     return response.json(user)

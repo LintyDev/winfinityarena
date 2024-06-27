@@ -9,6 +9,7 @@ export default class extends BaseSchema {
       table.integer('room_id').unsigned().references('rooms.id').notNullable()
       table.integer('user_id').unsigned().references('users.id').notNullable()
       table.boolean('win').defaultTo(false)
+      table.boolean('host').defaultTo(false)
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

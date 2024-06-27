@@ -78,12 +78,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return false;
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const checkUser = async () => {
       try {
         setUpdate(false);
         const res = await axiosClient.get('/me');
         setUser(res.data);
+        if (
+          !res.data.meta.inGame.length &&
+          (pathname === '/controller' || pathname === '/session')
+        ) {
+          router.push('/');
+        }
       } catch (error) {
         setUser(null);
         if (!unprotectedRoutes.includes(pathname)) {

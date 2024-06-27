@@ -1,54 +1,52 @@
 'use client';
 
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { io } from 'socket.io-client';
+import { useEffect, useState } from 'react';
+import LoadingView from '@/components/LoadingView';
+import JoinSessionFromMobile from '@/components/controller/JoinSession';
+import { useSocketController } from '@/contexts/SocketControllerContext';
+import ChooseGameFromMobile from '@/components/controller/ChooseGame';
 
 function GameController() {
   const auth = useAuth();
-  const router = useRouter();
+  const { king, session, socket } = useSocketController();
+  const [loadMobile, setLoadMobile] = useState(true);
+  const [gameStatus, setGameStatus] = useState<string>();
 
   useEffect(() => {
-    if (auth.user) {
-      if (!auth.user.meta.inGame.length) {
-        console.log('user not found');
-        router.push('/');
-        return;
-      }
-
-      const sessionId = auth.user.meta.inGame[0].sessionId;
-      const socket = io(`http://localhost:3333/`, {
-        withCredentials: true,
-      });
-
-      socket.emit('joinRoomFromMobile', {
-        roomId: sessionId,
-        username: auth.user.username,
-        userId: auth.user.id,
-        avatar: auth.user.avatar,
-      });
-
-      socket.on('hostDisconnected', ({ session }: { session: boolean }) => {
-        if (session) {
-          auth.setUpdate(true);
-          router.push('/');
-        }
-        return;
-      });
-
-      return () => {
-        socket.disconnect();
-      };
+    setLoadMobile(true);
+    if (!auth.user || !socket || !auth.user.meta.inGame.length || !session) {
+      return;
     }
-  }, [router, auth]);
+    setLoadMobile(false);
+    setGameStatus(session.status);
 
-  return (
-    <div>
-      <p>Room joined</p>
-      <p>{auth.user?.meta.inGame[0]?.sessionId}</p>
-    </div>
-  );
+    socket.on('changeMobileView', ({ status }: { status: string }) => {
+      setGameStatus(status);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [auth.user, socket, session]);
+
+  const renderView = () => {
+    if (loadMobile) {
+      return <LoadingView />;
+    }
+    switch (gameStatus) {
+      case 'IN_PROGRESS':
+        return <JoinSessionFromMobile />;
+      case 'CHOOSE_GAME':
+        if (king) {
+          return <ChooseGameFromMobile />;
+        }
+      default:
+        return <JoinSessionFromMobile />;
+    }
+  };
+
+  return <div className="h-full">{renderView()}</div>;
 }
 
 export default GameController;

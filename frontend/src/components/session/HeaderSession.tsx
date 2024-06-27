@@ -24,7 +24,7 @@ function HeaderSession() {
 
   return (
     <div className="w-full flex justify-between items-center pt-2 pb-[10px] px-[20px] bg-purple-950">
-      <p className="subtitle cursor-pointer">WinfinityArena</p>
+      <p className="subtitle cursor-default">WinfinityArena</p>
       <div className="flex justify-between gap-4 items-center">
         <p className="win-btn-small red" onClick={rageQuit}>
           Quitter la session

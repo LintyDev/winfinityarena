@@ -51,11 +51,16 @@ interface Total {
   total: string;
 }
 
-interface InGame {
+export interface InGame {
   id: number;
   sessionId: string;
   status: string;
   createdAt: Date;
   updatedAt: Date;
   accessKey: number;
+}
+
+export interface SocketUsers {
+  username: string;
+  avatar: string;
 }

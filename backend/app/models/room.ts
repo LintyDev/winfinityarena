@@ -23,6 +23,7 @@ export default class Room extends BaseModel {
     relatedKey: 'id',
     pivotForeignKey: 'room_id',
     pivotRelatedForeignKey: 'user_id',
+    pivotColumns: ['win'],
   })
   declare users: ManyToMany<typeof User>
 

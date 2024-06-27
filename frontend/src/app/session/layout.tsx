@@ -1,4 +1,5 @@
 import HeaderSession from '@/components/session/HeaderSession';
+import { SocketProvider } from '@/contexts/SocketContext';
 import { isMobile } from '@/lib/isMobile';
 import { redirect } from 'next/navigation';
 
@@ -8,10 +9,10 @@ function SessionLayout({ children }: { children: React.ReactNode }) {
     redirect('/controller');
   }
   return (
-    <>
+    <SocketProvider>
       <HeaderSession />
       {children}
-    </>
+    </SocketProvider>
   );
 }
 

@@ -31,7 +31,7 @@ class Ws {
     })
 
     this.io.on('connection', (socket: Socket) => {
-      console.log('User connected to server:', socket.id)
+      // console.log('User connected to server:', socket.id)
 
       socket.on(
         'joinRoomFromHost',
@@ -57,6 +57,7 @@ class Ws {
           console.log(`User ${socket.data.username} joined room ${roomId}`)
 
           let sockets = await this.io.in(roomId).fetchSockets()
+          this.io.to(roomId).emit('hostConnected')
           let users = sockets.filter((s) => !s.data.host).map((s) => s.data)
           callback({ users })
           socket.on('disconnect', async () => {
@@ -87,9 +88,17 @@ class Ws {
           socket.data.avatar = avatar
           socket.data.host = false
 
-          socket.join(roomId)
           let sockets = await this.io.in(roomId).fetchSockets()
           let users = sockets.filter((s) => !s.data.host).map((s) => s.data)
+
+          // max 6 players per room
+          if (users.length < 6) {
+            socket.join(roomId)
+          }
+
+          sockets = await this.io.in(roomId).fetchSockets()
+          users = sockets.filter((s) => !s.data.host).map((s) => s.data)
+
           this.io.to(roomId).emit('userConnected', { users })
           socket.on('disconnect', async () => {
             sockets = await this.io.in(roomId).fetchSockets()
@@ -98,6 +107,29 @@ class Ws {
           })
         }
       )
+
+      socket.on('isKingInRoom', async ({ roomId }: { roomId: string }, callback: Function) => {
+        console.log('isKing' + roomId)
+        const sockets = await this.io.in(roomId).fetchSockets()
+        const host = sockets.filter((s) => s.data.host)
+        if (host.length) {
+          callback(true)
+        } else {
+          callback(false)
+        }
+      })
+
+      socket.on('canStartSession', async ({ roomId }: { roomId: string }) => {
+        this.io.to(roomId).emit('canIStartSession')
+      })
+
+      socket.on('startingSession', async ({ roomId }: { roomId: string }) => {
+        this.io.to(roomId).emit('startSession')
+      })
+
+      socket.on('setMobileView', ({ roomId, status }: { roomId: string; status: string }) => {
+        this.io.to(roomId).emit('changeMobileView', { status })
+      })
     })
   }
 }

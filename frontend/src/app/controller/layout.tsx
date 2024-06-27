@@ -1,3 +1,4 @@
+import { SocketControllerProvider } from '@/contexts/SocketControllerContext';
 import { isMobile } from '@/lib/isMobile';
 import { redirect } from 'next/navigation';
 
@@ -6,7 +7,7 @@ function ControllerLayout({ children }: { children: React.ReactNode }) {
   if (!mobile) {
     redirect('/session');
   }
-  return <>{children}</>;
+  return <SocketControllerProvider>{children}</SocketControllerProvider>;
 }
 
 export default ControllerLayout;

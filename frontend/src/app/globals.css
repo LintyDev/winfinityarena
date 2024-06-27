@@ -106,4 +106,12 @@ body {
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
     border-radius: 10px;
   }
+
+  .game-paused {
+    position: absolute;
+    height: 100svh;
+    width: 100svw;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+  }
 }

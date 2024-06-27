@@ -1,115 +1,72 @@
 'use client';
 
+import LoadingView from '@/components/LoadingView';
+import ChooseGame from '@/components/session/ChooseGame';
+import JoinSession from '@/components/session/JoinSession';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSocket } from '@/contexts/SocketContext';
 import axiosClient from '@/lib/axiosClient';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-import { io } from 'socket.io-client';
+import { useEffect, useState } from 'react';
 
 function GameHost() {
   const auth = useAuth();
+  const { session, socket } = useSocket();
   const router = useRouter();
-  const [stateSession, setStateSession] = useState<string>(
-    'En attente de joueurs...'
-  );
-  const [userInSession, setUserInSession] = useState<
-    { username: string; avatar: string }[]
-  >([]);
+  const [gameStatus, setGameStatus] = useState<string>();
+  const [load, setLoad] = useState(true);
 
   useEffect(() => {
-    if (auth.user) {
-      if (!auth.user.meta.inGame.length) {
-        console.log('user not found');
-        router.push('/');
-        return;
+    setLoad(true);
+    if (!auth.user || !auth.user.meta.inGame.length || !socket || !session) {
+      console.log('user not found');
+      return;
+    }
+    setGameStatus(auth.user.meta.inGame[0].status);
+    setLoad(false);
+
+    socket.on('startSession', async () => {
+      try {
+        const res = await axiosClient.post('/session/start', {
+          sessionId: session.sessionId,
+        });
+        if (res.data.success) {
+          const newStatus: string = res.data.status;
+          setGameStatus(newStatus);
+          socket.emit('setMobileView', {
+            roomId: session.sessionId,
+            status: newStatus,
+          });
+        }
+      } catch (error) {
+        console.log(error);
       }
-      const sessionId = auth.user.meta.inGame[0].sessionId;
-      const socket = io(`http://localhost:3333/`, {
-        withCredentials: true,
-      });
+    });
 
-      socket.emit(
-        'joinRoomFromHost',
-        {
-          roomId: sessionId,
-          username: auth.user.username,
-          userId: auth.user.id,
-          host: true,
-        },
-        (res: any) => {
-          console.log(res);
-          setUserInSession(res.users);
-        }
-      );
+    // socket.on('changeView', (gameSt: any) => {
+    //   setGameStatus(gameSt);
+    // });
 
-      socket.on(
-        'userConnected',
-        ({ users }: { users: { username: string; avatar: string }[] }) => {
-          console.log('connected', users);
-          setUserInSession(users);
-        }
-      );
+    return () => {
+      socket.disconnect();
+    };
+  }, [auth.user, router, socket, session]);
 
-      socket.on(
-        'userDisconnected',
-        ({ users }: { users: { username: string; avatar: string }[] }) => {
-          console.log('disconnected', users);
-          setUserInSession(users);
-        }
-      );
-
-      return () => {
-        socket.disconnect();
-      };
+  const renderView = () => {
+    if (load) {
+      return <LoadingView />;
     }
-  }, [auth.user, router]);
-
-  useEffect(() => {
-    if (auth.user && userInSession.length > 1) {
-      const isKingThere = userInSession.filter(
-        (u) => u.username === auth.user?.username
-      );
-      isKingThere
-        ? setStateSession("L'hôte peut désormais lancer la session !")
-        : setStateSession("L'hôte doit rejoindre la session !");
-    } else {
-      setStateSession('En attente de joueurs...');
+    switch (gameStatus) {
+      case 'IN_PROGRESS':
+        return <JoinSession />;
+      case 'CHOOSE_GAME':
+        return <ChooseGame />;
+      default:
+        return <JoinSession />;
     }
-  }, [auth.user, userInSession]);
+  };
 
-  return (
-    <div className="flex flex-col items-center h-full bg-[url('/img/background_session.png')] bg-top bg-cover bg-no-repeat bg-fixed">
-      <div></div>
-      <h1 className="title !text-[45px] mb-5">Rejoindre la session</h1>
-      <div className="text-center">
-        <p className="subtitle !text-[30px] mb-1">Code :</p>
-        <p className="bg-black bg-opacity-75 rounded-lg p-4 text-xl">
-          {auth.user?.meta.inGame[0]?.accessKey}
-        </p>
-      </div>
-      <div className="mt-10 flex h-[155px]">
-        {userInSession.map((user, i) => {
-          return (
-            <div key={i} className="text-center subtitle">
-              <p>
-                {user.username}{' '}
-                <span>{user.username === auth.user?.username && '(Hôte)'}</span>
-              </p>
-              <Image
-                src={`/avatars/${user.avatar}.png`}
-                alt="placeholder avatar"
-                width={125}
-                height={125}
-                priority={true}
-              />
-            </div>
-          );
-        })}
-      </div>
-      <p>{stateSession}</p>
-    </div>
-  );
+  return <div className="h-full">{renderView()}</div>;
 }
 
 export default GameHost;

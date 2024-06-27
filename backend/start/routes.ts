@@ -38,6 +38,8 @@ router
     router.get('/create', [RoomsController, 'create']).as('create')
     router.post('/join', [RoomsController, 'join']).as('join')
     router.post('/ragequit', [RoomsController, 'forceQuit']).as('ragequit')
+    router.get('/king', [RoomsController, 'king']).as('king')
+    router.post('/start', [RoomsController, 'start']).as('start')
   })
   .as('session')
   .prefix('/session')

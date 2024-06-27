@@ -13,7 +13,7 @@ export default class RoomsController {
     room.sessionId = randomUUID()
     room.accessKey = randomAccessKey()
     await room.save()
-    await room.related('users').attach([user.id])
+    await room.related('users').attach({ [user.id]: { host: true } })
 
     return response.json({ success: true })
   }
@@ -36,10 +36,31 @@ export default class RoomsController {
     room.status = RoomStatus.COMPLETED
     room.save()
 
-    // const usersSockets = await w_service.io.in(data.sessionId).fetchSockets()
-    // console.log(usersSockets)
     w_service.io.to(data.sessionId).emit('hostDisconnected', { session: true })
 
     return response.json({ success: true })
+  }
+
+  async king({ auth, response }: HttpContext) {
+    await auth.check()
+    const user = auth.getUserOrFail()
+    const king = await user
+      .related('rooms')
+      .query()
+      .wherePivot('host', true)
+      .whereNot('status', RoomStatus.COMPLETED)
+      .as('king')
+
+    return response.json({ king: king.length ? true : false })
+  }
+
+  async start({ auth, request, response }: HttpContext) {
+    await auth.check()
+    const data = request.only(['sessionId'])
+    const room = await Room.findByOrFail('sessionId', data.sessionId)
+    room.status = RoomStatus.CHOOSE_GAME
+    room.save()
+
+    return response.json({ success: true, status: room.status })
   }
 }

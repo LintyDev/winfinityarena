@@ -36,7 +36,7 @@ function StartMenu({ isMobile }: { isMobile: boolean }) {
       console.log(res.data);
       if (res.data.success) {
         setUpdate(true);
-        router.push('/controller');
+        router.push('/session');
       }
     } catch (error) {
       console.log(error);
