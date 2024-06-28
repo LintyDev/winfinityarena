@@ -6,10 +6,11 @@ import LoadingView from '@/components/LoadingView';
 import JoinSessionFromMobile from '@/components/controller/JoinSession';
 import { useSocketController } from '@/contexts/SocketControllerContext';
 import ChooseGameFromMobile from '@/components/controller/ChooseGame';
+import PauseScreen from '@/components/controller/PauseScreen';
 
 function GameController() {
   const auth = useAuth();
-  const { king, session, socket } = useSocketController();
+  const { king, session, socket, pauseScreen } = useSocketController();
   const [loadMobile, setLoadMobile] = useState(true);
   const [gameStatus, setGameStatus] = useState<string>();
 
@@ -46,7 +47,12 @@ function GameController() {
     }
   };
 
-  return <div className="h-full">{renderView()}</div>;
+  return (
+    <div className="h-full">
+      <PauseScreen />
+      {renderView()}
+    </div>
+  );
 }
 
 export default GameController;

@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  RefObject,
   useContext,
   useLayoutEffect,
   useRef,
@@ -17,6 +18,7 @@ interface SocketControllerContextType {
   king: boolean;
   socket: Socket | null;
   session: InGame | null;
+  pauseScreen: RefObject<HTMLDivElement> | null;
 }
 
 export const SocketControllerContext =
@@ -24,6 +26,7 @@ export const SocketControllerContext =
     king: false,
     socket: null,
     session: null,
+    pauseScreen: null,
   });
 
 export const SocketControllerProvider = ({
@@ -100,14 +103,9 @@ export const SocketControllerProvider = ({
   }, [user, setUpdate, router]);
 
   return (
-    <SocketControllerContext.Provider value={{ king, socket, session }}>
-      <div
-        className="game-paused flex flex-col items-center justify-center"
-        ref={pauseScreen}
-      >
-        <p className="title !text-[70px]">PAUSE</p>
-        <p className="subtitle">En attente de l&apos;hôte...</p>
-      </div>
+    <SocketControllerContext.Provider
+      value={{ king, socket, session, pauseScreen }}
+    >
       {children}
     </SocketControllerContext.Provider>
   );
