@@ -7,6 +7,7 @@ import JoinSessionFromMobile from '@/components/controller/JoinSession';
 import { useSocketController } from '@/contexts/SocketControllerContext';
 import ChooseGameFromMobile from '@/components/controller/ChooseGame';
 import PauseScreen from '@/components/controller/PauseScreen';
+import InGameMobile from '@/components/controller/InGame';
 
 function GameController() {
   const auth = useAuth();
@@ -42,6 +43,8 @@ function GameController() {
         if (king) {
           return <ChooseGameFromMobile />;
         }
+      case 'IN_GAME':
+        return <InGameMobile />;
       default:
         return <JoinSessionFromMobile />;
     }

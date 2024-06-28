@@ -63,4 +63,20 @@ export default class RoomsController {
 
     return response.json({ success: true, status: room.status })
   }
+
+  async chooseGame({ auth, request, response }: HttpContext) {
+    await auth.check()
+    const data = request.only(['sessionId', 'game'])
+    const room = await Room.findByOrFail('sessionId', data.sessionId)
+    room.status = RoomStatus.IN_GAME
+    // room.game = data.game
+    const currGame = 'uno_pokemon'
+    room.game = currGame
+    room.save()
+
+    w_service.io.to(data.sessionId).emit('changeView', { view: RoomStatus.IN_GAME, game: currGame })
+    w_service.io.to(data.sessionId).emit('changeMobileView', { status: RoomStatus.IN_GAME })
+
+    return response.json({ success: true })
+  }
 }

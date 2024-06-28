@@ -40,6 +40,7 @@ router
     router.post('/ragequit', [RoomsController, 'forceQuit']).as('ragequit')
     router.get('/king', [RoomsController, 'king']).as('king')
     router.post('/start', [RoomsController, 'start']).as('start')
+    router.post('/choosegame', [RoomsController, 'chooseGame']).as('choosegame')
   })
   .as('session')
   .prefix('/session')

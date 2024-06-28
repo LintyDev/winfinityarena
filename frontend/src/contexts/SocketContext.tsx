@@ -28,6 +28,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
     setSession(user.meta.inGame[0]);
+    console.log(user.meta.inGame[0]);
 
     const newSocket = io(
       process.env.NEXT_PUBLIC_WEBSOCKET_SERVER ?? 'http://localhost:3333/',

@@ -17,6 +17,9 @@ export default class Room extends BaseModel {
   @column()
   declare accessKey: number
 
+  @column()
+  declare game: string | null
+
   @manyToMany(() => User, {
     pivotTable: 'users_rooms',
     localKey: 'id',

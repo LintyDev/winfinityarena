@@ -55,6 +55,7 @@ export interface InGame {
   id: number;
   sessionId: string;
   status: string;
+  game: string | null;
   createdAt: Date;
   updatedAt: Date;
   accessKey: number;
