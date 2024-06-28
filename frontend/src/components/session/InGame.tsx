@@ -2,11 +2,12 @@
 
 import { useSocket } from '@/contexts/SocketContext';
 
-function InGame({ game }: { game: string }) {
+function InGame() {
+  // console.log(game);
   const { session } = useSocket();
   return (
     <div>
-      <p>in game {game ?? session?.game ?? 'dd'}</p>
+      <p>in game {session?.game as string}</p>
     </div>
   );
 }

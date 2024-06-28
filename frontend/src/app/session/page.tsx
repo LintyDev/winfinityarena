@@ -16,7 +16,6 @@ function GameHost() {
   const router = useRouter();
   const [gameStatus, setGameStatus] = useState<string>();
   const [load, setLoad] = useState(true);
-  const [game, setGame] = useState('');
 
   useEffect(() => {
     setLoad(true);
@@ -25,7 +24,6 @@ function GameHost() {
       return;
     }
     setGameStatus(auth.user.meta.inGame[0].status);
-    setGame(auth.user.meta.inGame[0].game ?? '');
     setLoad(false);
 
     socket.on('startSession', async () => {
@@ -49,7 +47,7 @@ function GameHost() {
     socket.on(
       'changeView',
       ({ view, game }: { view: string; game: string }) => {
-        setGame(game);
+        auth.setUpdate(true);
         setGameStatus(view);
       }
     );
@@ -57,7 +55,7 @@ function GameHost() {
     return () => {
       socket.disconnect();
     };
-  }, [auth.user, router, socket, session]);
+  }, [auth.user, router, socket, session, auth]);
 
   const renderView = () => {
     if (load) {
@@ -69,7 +67,7 @@ function GameHost() {
       case 'CHOOSE_GAME':
         return <ChooseGame />;
       case 'IN_GAME':
-        return <InGame game={game} />;
+        return <InGame />;
       default:
         return <JoinSession />;
     }
