@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useSocket } from '@/contexts/SocketContext';
+import axiosClient from '@/lib/axiosClient';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
@@ -13,25 +14,41 @@ function JoinSession() {
   );
 
   useEffect(() => {
-    if (!auth.user || !auth.user.meta.inGame.length || !socket || !session) {
+    if (!auth.user || !auth.user.meta.inGame.length || !session) {
       return;
     }
+    const canStartSession = async () => {
+      try {
+        const res = await axiosClient.post('/game/eventstart', {
+          sessionId: session.sessionId,
+        });
+        if (res.data.success) {
+          return true;
+        }
+        return false;
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+    };
+
     if (users.length > 1) {
       const isKingThere = users.filter(
         (u) => u.username === auth.user?.username
       );
-      if (isKingThere.length) {
-        socket.emit('canStartSession', {
-          roomId: session.sessionId,
+      if (isKingThere.length > 0) {
+        canStartSession().then((res) => {
+          if (res) {
+            setStateSession("L'hôte peut désormais lancer la session !");
+          }
         });
-        setStateSession("L'hôte peut désormais lancer la session !");
       } else {
         setStateSession("L'hôte doit rejoindre la session !");
       }
     } else {
       setStateSession('En attente de joueurs...');
     }
-  }, [auth.user, users, socket, session]);
+  }, [auth.user, session, users]);
 
   return (
     <div className="flex flex-col items-center h-full bg-[url('/img/background_session.png')] bg-top bg-cover bg-no-repeat bg-fixed">

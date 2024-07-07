@@ -27,6 +27,10 @@ function JoinSessionFromMobile() {
       canStartSession();
       return;
     });
+
+    return () => {
+      socket.off('canIStartSession');
+    };
   }, [auth.user, socket, session]);
 
   return (

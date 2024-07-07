@@ -120,6 +120,7 @@ class Ws {
       })
 
       socket.on('canStartSession', async ({ roomId }: { roomId: string }) => {
+        console.log('je lance une session')
         this.io.to(roomId).emit('canIStartSession')
       })
 
@@ -129,6 +130,67 @@ class Ws {
 
       socket.on('setMobileView', ({ roomId, status }: { roomId: string; status: string }) => {
         this.io.to(roomId).emit('changeMobileView', { status })
+      })
+
+      socket.on(
+        'sendCardToController',
+        ({ roomId, card, username }: { roomId: string; card: any; username: string }) => {
+          this.io.to(roomId).emit(`cardToDeck-${username}`, { card })
+        }
+      )
+
+      socket.on('haveCards', ({ roomId, username }: { roomId: string; username: string }) => {
+        this.io.to(roomId).emit('sendCardsToPlayer', { username })
+      })
+
+      socket.on('yourTurnToPlay', ({ roomId, username }: { roomId: string; username: string }) => {
+        this.io.to(roomId).emit(`yourTurnToPlay-${username}`)
+      })
+
+      socket.on('skip', ({ roomId, username }: { roomId: string; username: string }) => {
+        this.io.to(roomId).emit('playerWantSkip', { username })
+      })
+
+      socket.on('pick', ({ roomId, username }: { roomId: string; username: string }) => {
+        this.io.to(roomId).emit('playerWantPick', { username })
+      })
+
+      socket.on(
+        'put',
+        ({ roomId, username, card }: { roomId: string; username: string; card: {} }) => {
+          this.io.to(roomId).emit('playerPutCard', { username, card })
+        }
+      )
+
+      socket.on(
+        'afterAction',
+        ({
+          roomId,
+          username,
+          action,
+          message,
+          cards,
+        }: {
+          roomId: string
+          username: string
+          action: string
+          message: string
+          cards: any
+        }) => {
+          this.io.to(roomId).emit(`afterAction-${username}`, { action, message, cards })
+        }
+      )
+
+      socket.on('UNOPOKEMON', ({ roomId, username }: { roomId: string; username: string }) => {
+        this.io.to(roomId).emit('UNOPOKEMONCONTROLLER', { username })
+      })
+
+      socket.on('UNOPOKEMONTRIGGER', ({ roomId, uno }: { roomId: string; uno: boolean }) => {
+        this.io.to(roomId).emit('UNOPOKEMONHOST', { uno })
+      })
+
+      socket.on('endGame', ({ roomId, username }: { roomId: string; username: string }) => {
+        this.io.to(roomId).emit('endGameController', { username })
       })
     })
   }

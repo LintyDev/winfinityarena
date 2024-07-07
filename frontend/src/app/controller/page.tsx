@@ -18,6 +18,7 @@ function GameController() {
   useEffect(() => {
     setLoadMobile(true);
     if (!auth.user || !socket || !auth.user.meta.inGame.length || !session) {
+      console.log(session);
       return;
     }
     setLoadMobile(false);
@@ -28,7 +29,7 @@ function GameController() {
     });
 
     return () => {
-      socket.disconnect();
+      socket.off('changeMobileView');
     };
   }, [auth.user, socket, session]);
 
@@ -43,6 +44,7 @@ function GameController() {
         if (king) {
           return <ChooseGameFromMobile />;
         }
+        return <JoinSessionFromMobile />;
       case 'IN_GAME':
         return <InGameMobile />;
       default:

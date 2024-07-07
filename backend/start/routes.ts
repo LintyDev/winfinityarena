@@ -12,6 +12,7 @@ const LogoutController = () => import('#controllers/auth/logout_controller')
 const LoginController = () => import('#controllers/auth/login_controller')
 const UserController = () => import('#controllers/user_controller')
 const RoomsController = () => import('#controllers/rooms_controller')
+const GamesController = () => import('#controllers/games_controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 
@@ -41,9 +42,22 @@ router
     router.get('/king', [RoomsController, 'king']).as('king')
     router.post('/start', [RoomsController, 'start']).as('start')
     router.post('/choosegame', [RoomsController, 'chooseGame']).as('choosegame')
+    router.post('/room', [RoomsController, 'room']).as('room')
+    router.get('/history', [RoomsController, 'getGameHistory']).as('history')
   })
   .as('session')
   .prefix('/session')
+  .use(middleware.auth())
+
+router
+  .group(() => {
+    router.post('/eventstart', [GamesController, 'eventCanStartSession']).as('eventstart')
+    router.post('/set', [GamesController, 'setGame']).as('setgame')
+    router.post('/get', [GamesController, 'getGame']).as('getgame')
+    router.post('/winner', [GamesController, 'setWinner']).as('setwinner')
+  })
+  .as('game')
+  .prefix('/game')
   .use(middleware.auth())
 
 router

@@ -1,15 +1,12 @@
 'use client';
 
 import { useSocket } from '@/contexts/SocketContext';
+import GameUnoPokemon from '@/games/uno_pokemon/components/Game';
 
 function InGame() {
-  // console.log(game);
   const { session } = useSocket();
-  return (
-    <div>
-      <p>in game {session?.game as string}</p>
-    </div>
-  );
+
+  return <GameUnoPokemon />;
 }
 
 export default InGame;

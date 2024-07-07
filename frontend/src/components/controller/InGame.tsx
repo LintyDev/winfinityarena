@@ -1,9 +1,7 @@
+import ControllerUnoPokemon from '@/games/uno_pokemon/components/Controller';
+
 function InGameMobile() {
-  return (
-    <div>
-      <p>component mobile</p>
-    </div>
-  );
+  return <ControllerUnoPokemon />;
 }
 
 export default InGameMobile;

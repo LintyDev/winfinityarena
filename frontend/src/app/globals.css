@@ -68,6 +68,12 @@ body {
     box-shadow: 0 0.2em #99610d;
   }
 
+  .yellow {
+    background-color: #bdb710;
+    color: #63660b;
+    box-shadow: 0 0.2em #97990d;
+  }
+
   .title {
     @apply font-upheavtt text-4xl;
     text-shadow: -1px -1px 0 black, -3px -1px 0 black, -3px 3px 0 black,
@@ -113,5 +119,10 @@ body {
     width: 100svw;
     background: rgba(0, 0, 0, 0.5);
     display: none;
+  }
+
+  .selected {
+    border: solid 5px white;
+    border-radius: 15px;
   }
 }

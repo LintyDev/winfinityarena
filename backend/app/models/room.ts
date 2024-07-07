@@ -15,6 +15,9 @@ export default class Room extends BaseModel {
   declare status: RoomStatus
 
   @column()
+  declare gameState: object | null
+
+  @column()
   declare accessKey: number
 
   @column()

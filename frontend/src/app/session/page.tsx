@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 
 function GameHost() {
   const auth = useAuth();
-  const { session, socket } = useSocket();
+  const { session, socket, setGetSession } = useSocket();
   const router = useRouter();
   const [gameStatus, setGameStatus] = useState<string>();
   const [load, setLoad] = useState(true);
@@ -48,14 +48,16 @@ function GameHost() {
       'changeView',
       ({ view, game }: { view: string; game: string }) => {
         auth.setUpdate(true);
+        setGetSession(true);
         setGameStatus(view);
       }
     );
 
     return () => {
-      socket.disconnect();
+      socket.off('changeView');
+      socket.off('startSession');
     };
-  }, [auth.user, router, socket, session, auth]);
+  }, [auth.user, router, socket, session, auth, setGetSession]);
 
   const renderView = () => {
     if (load) {
@@ -73,7 +75,11 @@ function GameHost() {
     }
   };
 
-  return <div className="h-full">{renderView()}</div>;
+  return (
+    <div className="h-full" id="gaming_zone">
+      {renderView()}
+    </div>
+  );
 }
 
 export default GameHost;

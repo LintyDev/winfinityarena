@@ -4,6 +4,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { randomUUID } from 'node:crypto'
 import RoomStatus from '../Enums/room.js'
 import w_service from '#services/w_service'
+import db from '@adonisjs/lucid/services/db'
 
 export default class RoomsController {
   async create({ auth, response }: HttpContext) {
@@ -24,9 +25,14 @@ export default class RoomsController {
     const data = request.only(['accessKey'])
     console.log(data)
     const room = await Room.findByOrFail('access_key', +data.accessKey)
-    await room.related('users').attach([user.id])
+    await room.load('users')
 
-    return response.json({ success: true })
+    if (room.users.length < 6) {
+      await room.related('users').attach([user.id])
+      return response.json({ success: true })
+    }
+
+    return response.json({ success: false })
   }
 
   async forceQuit({ auth, request, response }: HttpContext) {
@@ -78,5 +84,20 @@ export default class RoomsController {
     w_service.io.to(data.sessionId).emit('changeMobileView', { status: RoomStatus.IN_GAME })
 
     return response.json({ success: true })
+  }
+
+  async room({ auth, request, response }: HttpContext) {
+    await auth.check()
+    const data = request.only(['sessionId'])
+    const room = await Room.findByOrFail('sessionId', data.sessionId)
+    await room.load('users')
+
+    return response.json({ success: true, session: room })
+  }
+
+  async getGameHistory({ auth, response }: HttpContext) {
+    await auth.check()
+    const rooms = await db.from('room').paginate(1, 10)
+    return response.json({ success: true, session: rooms.toJSON() })
   }
 }

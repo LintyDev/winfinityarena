@@ -14,7 +14,6 @@ function StartMenu({ isMobile }: { isMobile: boolean }) {
   const createSession = async () => {
     try {
       const res = await axiosClient.get('/session/create');
-      console.log(res.data);
       if (res.data.success) {
         setUpdate(true);
         router.push('/session');
@@ -33,7 +32,6 @@ function StartMenu({ isMobile }: { isMobile: boolean }) {
       const res = await axiosClient.post('/session/join', {
         accessKey: sessionAccessKey,
       });
-      console.log(res.data);
       if (res.data.success) {
         setUpdate(true);
         router.push('/session');

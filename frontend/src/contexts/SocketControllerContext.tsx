@@ -4,6 +4,7 @@ import {
   createContext,
   RefObject,
   useContext,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -42,25 +43,32 @@ export const SocketControllerProvider = ({
   const pauseScreen = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
-    if (!user || !user.meta.inGame.length) {
-      return;
-    }
-
-    setSession(user.meta.inGame[0]);
-
-    const newSocket = io(
+    const socket = io(
       process.env.NEXT_PUBLIC_WEBSOCKET_SERVER ?? 'http://localhost:3333/',
       {
         withCredentials: true,
       }
     );
-    setSocket(newSocket);
+    socket.connect();
+    setSocket(socket);
+
+    return () => {
+      socket.disconnect();
+      setSocket(null);
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!user || !user.meta.inGame.length || !socket) {
+      return;
+    }
+    setSession(user.meta.inGame[0]);
 
     const checkKingAndJoinSession = async () => {
       try {
         const res = await axiosClient.get('/session/king');
         setKing(res.data.king);
-        newSocket.emit('joinRoomFromMobile', {
+        socket.emit('joinRoomFromMobile', {
           roomId: user.meta.inGame[0].sessionId,
           username: user.username,
           userId: user.id,
@@ -72,7 +80,7 @@ export const SocketControllerProvider = ({
     };
     checkKingAndJoinSession();
 
-    newSocket.emit(
+    socket.emit(
       'isKingInRoom',
       { roomId: user.meta.inGame[0].sessionId },
       (hostIn: boolean) => {
@@ -82,11 +90,11 @@ export const SocketControllerProvider = ({
       }
     );
 
-    newSocket.on('hostConnected', () => {
+    socket.on('hostConnected', () => {
       pauseScreen.current && (pauseScreen.current.style.display = 'none');
     });
 
-    newSocket.on('hostDisconnected', ({ session }: { session: boolean }) => {
+    socket.on('hostDisconnected', ({ session }: { session: boolean }) => {
       if (session) {
         setUpdate(true);
         router.push('/');
@@ -97,10 +105,10 @@ export const SocketControllerProvider = ({
     });
 
     return () => {
-      newSocket.disconnect();
-      setSocket(null);
+      socket.off('hostConnected');
+      socket.off('hostDisconnected');
     };
-  }, [user, setUpdate, router]);
+  }, [user, socket, router, setUpdate]);
 
   return (
     <SocketControllerContext.Provider
