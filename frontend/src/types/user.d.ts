@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+
 export default interface User {
   id: number;
 
@@ -65,4 +67,15 @@ export interface InGame {
 export interface SocketUsers {
   username: string;
   avatar: string;
+}
+
+export interface SessionHistory {
+  id: number;
+  game: string;
+  updatedAt: string;
+  users: UserName[];
+}
+
+interface UserName {
+  username: string;
 }

@@ -45,6 +45,10 @@ function StartMenu({ isMobile }: { isMobile: boolean }) {
     router.push('/session');
   };
 
+  const goToHistory = () => {
+    router.push('/history');
+  };
+
   return (
     <div className="flex flex-col gap-4 bg-purple-950 p-5 rounded-md">
       {user?.meta.inGame?.length ? (
@@ -70,7 +74,9 @@ function StartMenu({ isMobile }: { isMobile: boolean }) {
           </p>
         </>
       )}
-      <p className="win-btn orange">Historique</p>
+      <p className="win-btn orange" onClick={goToHistory}>
+        Historique
+      </p>
     </div>
   );
 }

@@ -4,7 +4,6 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { randomUUID } from 'node:crypto'
 import RoomStatus from '../Enums/room.js'
 import w_service from '#services/w_service'
-import db from '@adonisjs/lucid/services/db'
 
 export default class RoomsController {
   async create({ auth, response }: HttpContext) {
@@ -97,7 +96,24 @@ export default class RoomsController {
 
   async getGameHistory({ auth, response }: HttpContext) {
     await auth.check()
-    const rooms = await db.from('room').paginate(1, 10)
-    return response.json({ success: true, session: rooms.toJSON() })
+    const room = await Room.query()
+      .preload('users', (u) => {
+        u.wherePivot('win', true).select('username')
+      })
+      .orderBy('id', 'desc')
+      .limit(10)
+    const rooms = room.map((r) => {
+      return {
+        ...r.serialize({
+          fields: ['id', 'game', 'updatedAt'],
+          relations: {
+            users: {
+              fields: ['username'],
+            },
+          },
+        }),
+      }
+    })
+    return response.json({ success: true, session: rooms })
   }
 }
