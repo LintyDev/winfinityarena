@@ -1,15 +1,16 @@
 'use client';
 
 import Phaser from 'phaser';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSocket } from '@/contexts/SocketContext';
 import UNOPOKEMON from '../scenes/GameScene';
 
 function GameUnoPokemon() {
   const { session, socket } = useSocket();
+  const parentEl = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!session || !socket) {
+    if (!session || !socket || !parentEl.current) {
       return;
     }
     const sizes = {
@@ -19,7 +20,7 @@ function GameUnoPokemon() {
 
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
-      parent: 'phaser-container',
+      parent: parentEl.current,
       width: sizes.width,
       height: sizes.height,
       scene: new UNOPOKEMON(session, socket),
@@ -32,7 +33,7 @@ function GameUnoPokemon() {
     };
   }, [session, socket]);
 
-  return <div id="phaser-container"></div>;
+  return <div id="phaser-container" ref={parentEl}></div>;
 }
 
 export default GameUnoPokemon;

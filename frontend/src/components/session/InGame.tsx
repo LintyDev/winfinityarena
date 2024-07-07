@@ -1,12 +1,12 @@
 'use client';
-
-import { useSocket } from '@/contexts/SocketContext';
-import GameUnoPokemon from '@/games/uno_pokemon/components/Game';
+import dynamic from 'next/dynamic';
+const DynamicComponentWithNoSSR = dynamic(
+  () => import('@/games/uno_pokemon/components/Game'),
+  { ssr: false }
+);
 
 function InGame() {
-  const { session } = useSocket();
-
-  return <GameUnoPokemon />;
+  return <DynamicComponentWithNoSSR />;
 }
 
 export default InGame;
