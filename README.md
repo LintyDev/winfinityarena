@@ -27,7 +27,7 @@ WinfinityArena is a side project born from childhood memories and family competi
 
 WinfinityArena brings together a collection of classic and innovative games into a single platform. Users can join existing session or create new ones, invite friends, and compete to see who comes out on top. The platform is designed to be intuitive, with simple navigation and clear instructions for each game.
 
-https://github.com/LintyDev/winfinityarena/assets/137212265/869a8425-1175-4f0c-a007-bb1757b88ece
+https://github.com/LintyDev/winfinityarena/assets/137212265/0b458b95-47a2-4b85-b70b-cb9a2458af6e
 
 This visual guide provides an overview of the gameplay and user interactions within WinfinityArena.
 
