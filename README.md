@@ -2,7 +2,7 @@
 
 WinfinityArena is a side project born from childhood memories and family competitions. It offers an immersive gaming experience where users can enjoy a variety of games in a dynamic and engaging environment. Dive into WinfinityArena and rediscover the joy of competitive play and creative challenges.
 
-![GitHub package.json version (branch)](https://img.shields.io/github/v/tag/LintyDev/winfinityarena?label=winfinityarena) ![GitHub issues](https://img.shields.io/github/issues/LintyDev/winfinityarena?color=yellow) ![Licences](https://img.shields.io/github/license/LintyDev/winfinityarena)
+![GitHub package.json version (branch)](https://img.shields.io/github/v/tag/LintyDev/winfinityarena?label=winfinityarena) ![GitHub issues](https://img.shields.io/github/issues/LintyDev/winfinityarena?color=yellow) ![Licences](https://img.shields.io/badge/license-MIT-brightgreen)
 
 ## Summary
 
