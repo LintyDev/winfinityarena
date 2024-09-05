@@ -262,6 +262,7 @@ class UNOPOKEMON extends Phaser.Scene {
       'playerWantPick',
       async ({ username }: { username: string }) => {
         const player = this.players[this.activePlayer];
+        player.uno = false;
         if (player.username !== username) {
           return;
         }
